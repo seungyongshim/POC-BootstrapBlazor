@@ -1,12 +1,8 @@
-﻿@page "/fetchdata"
+@page "/fetchdata"
 @using BlazorApp1.Shared
 @inject HttpClient Http
 
-<PageTitle>Weather forecast</PageTitle>
-
 <h1>Weather forecast</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
 
 @if (forecasts == null)
 {
@@ -14,6 +10,21 @@
 }
 else
 {
+    <Table TItem="WeatherForecast"
+           Items="forecasts"
+           IsPagination="true"
+           IsBordered="true"
+           IsMultipleSelect="true"
+           AddButtonText="추가"
+           DeleteButtonText="삭제"
+           ShowToolbar="true"
+           ShowRefresh="false">
+         <TableColumns>
+             <TableColumn @bind-Field="@context.Date"  />
+             <TableColumn @bind-Field="@context.TemperatureC" />
+             <TableColumn @bind-Field="@context.Summary" />
+         </TableColumns>
+    </Table>
     <table class="table">
         <thead>
             <tr>
@@ -37,11 +48,4 @@ else
     </table>
 }
 
-@code {
-    private WeatherForecast[]? forecasts;
 
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-    }
-}
